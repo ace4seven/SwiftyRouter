@@ -14,7 +14,7 @@ import SwiftUI
 /// The associated `Factory` describes the destination type used by the router. Typically,
 /// this is a value that knows how to build a SwiftUI `View` (via `SwiftyRouter`),
 /// allowing the router to remain decoupled from concrete view implementations.
-protocol Routable: AnyObject, Observable {
+protocol Routable: AnyObject, ObservableObject {
 
     associatedtype Factory: SwiftyRouter
 

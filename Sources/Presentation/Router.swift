@@ -7,13 +7,12 @@
 
 import SwiftUI
 
-@Observable public class Router<Factory: SwiftyRouter>: Routable {
+public class Router<Factory: SwiftyRouter>: Routable {
 
-    internal var path: [Factory] = []
-
-    internal var modalDestination: Factory? = nil
-    internal var fullScreenCoverDestination: Factory? = nil
-    internal var detents: Set<PresentationDetent> = []
+    @Published internal var path: [Factory] = []
+    @Published internal var modalDestination: Factory? = nil
+    @Published internal var fullScreenCoverDestination: Factory? = nil
+    @Published internal var detents: Set<PresentationDetent> = []
 
     /// Creates a new, empty router.
     ///

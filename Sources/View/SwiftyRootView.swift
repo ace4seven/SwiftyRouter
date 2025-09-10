@@ -10,8 +10,8 @@ import OSLog
 
 public struct SwiftyRootView<Factory: SwiftyRouter, Content: View>: View {
 
-    @Bindable public var router: Router<Factory>
-    public var content: () -> Content
+    @ObservedObject var router: Router<Factory>
+    let content: () -> Content
 
     public init(router: Router<Factory>, @ViewBuilder content: @escaping () -> Content) {
         self.router = router
@@ -46,7 +46,7 @@ public struct SwiftyRootView<Factory: SwiftyRouter, Content: View>: View {
             factory.viewForDestination()
                 .onAppear { logDebug("🖼️ FullScreenCover • Destination=\(String(describing: factory))") }
         }
-        .environment(router)
+        .environmentObject(router)
     }
 }
 

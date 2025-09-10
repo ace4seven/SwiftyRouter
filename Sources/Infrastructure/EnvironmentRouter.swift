@@ -20,21 +20,9 @@ import SwiftUI
 public struct EnvironmentRouter<R: SwiftyRouter>: DynamicProperty {
 
     /// The environment-backed optional router.
-    @Environment(Router<R>.self) private var router: Router<R>?
+    @EnvironmentObject private var router: Router<R>
 
-    /// The non-optional router value.
-    ///
-    /// Triggers a `fatalError` if the router has not been injected into the environment.
     public var wrappedValue: Router<R> {
-        guard let router else {
-            fatalError(
-                "EnvironmentRouter<\(R.self)> is not available. " +
-                "No Router<\(R.self)> was found in the SwiftUI environment. " +
-                "Inject a router at or above this view, e.g.: " +
-                ".environment(Router<\(R.self)>.self, routerInstance)"
-            )
-        }
-
         return router
     }
 
