@@ -8,12 +8,12 @@
 import SwiftUI
 import OSLog
 
-public struct SwiftyRootView<Factory: SwiftyRouter, Content: View>: View {
+public struct SwiftyRootView<Destination: SwiftyRouter, Content: View>: View {
 
-    @ObservedObject var router: Router<Factory>
+    @ObservedObject var router: Router<Destination>
     let content: () -> Content
 
-    public init(router: Router<Factory>, @ViewBuilder content: @escaping () -> Content) {
+    public init(router: Router<Destination>, @ViewBuilder content: @escaping () -> Content) {
         self.router = router
         self.content = content
     }
@@ -22,11 +22,11 @@ public struct SwiftyRootView<Factory: SwiftyRouter, Content: View>: View {
         NavigationStack(path: $router.path) {
             content()
                 .navigationDestination(
-                    for: Factory.self,
-                    destination: { factory in
-                        factory.viewForDestination()
-                            .id(factory)
-                            .onAppear { logDebug("🧭 Push • Destination=\(String(describing: factory))") }
+                    for: Destination.self,
+                    destination: { destination in
+                        destination.viewForDestination()
+                            .id(destination)
+                            .onAppear { logDebug("🧭 Push • Destination=\(String(describing: destination))") }
                     }
                 )
         }
@@ -34,17 +34,17 @@ public struct SwiftyRootView<Factory: SwiftyRouter, Content: View>: View {
             router.popToRoot()
             logDebug("🚀 Router Load • Name=\(String(describing: router))")
         }
-        .sheet(item: router.binding(for: \.modalDestination)) { factory in
-            factory.viewForDestination()
+        .sheet(item: router.binding(for: \.modalDestination)) { destination in
+            destination.viewForDestination()
                 .presentationDetents(router.detents)
                 .onAppear {
                     let detentsText = router.detents.isEmpty ? "default" : String(describing: router.detents)
-                    logDebug("🗂️ Sheet • Destination=\(String(describing: factory)); detents=\(detentsText)")
+                    logDebug("🗂️ Sheet • Destination=\(String(describing: destination)); detents=\(detentsText)")
                 }
         }
-        .fullScreenCover(item: router.binding(for: \.fullScreenCoverDestination)) { factory in
-            factory.viewForDestination()
-                .onAppear { logDebug("🖼️ FullScreenCover • Destination=\(String(describing: factory))") }
+        .fullScreenCover(item: router.binding(for: \.fullScreenCoverDestination)) { destination in
+            destination.viewForDestination()
+                .onAppear { logDebug("🖼️ FullScreenCover • Destination=\(String(describing: destination))") }
         }
         .environmentObject(router)
     }
@@ -64,7 +64,7 @@ public extension View {
     /// ### Example
     /// ```swift
     /// struct AppRoot: View {
-    ///     @State var router = Router<AppFactory>()
+    ///     @State var router = Router<AppRouter>()
     ///
     ///     var body: some View {
     ///         ContentView()
@@ -72,8 +72,8 @@ public extension View {
     ///     }
     /// }
     /// ```
-    public func swiftyRootView<F: SwiftyRouter>(
-        router: Router<F>
+    public func swiftyRootView<Destination: SwiftyRouter>(
+        router: Router<Destination>
     ) -> some View {
         SwiftyRootView(router: router) {
             self

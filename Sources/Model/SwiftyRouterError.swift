@@ -22,6 +22,4 @@ public enum SwiftyRouterError: Error {
     /// - If the stack contains 2 screens and you attempt to pop 3, this error is thrown.
     /// - If a depth of 0 or a negative number is provided, this error can also be thrown.
     case invalidPopDepth
-
-    // TODO: Add Additional Errors
 }

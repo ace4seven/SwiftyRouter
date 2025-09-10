@@ -11,34 +11,34 @@ import SwiftUI
 /// on the main actor. Conforming types are expected to manage a navigation stack (push/pop),
 /// as well as modal and full‑screen presentations.
 ///
-/// The associated `Factory` describes the destination type used by the router. Typically,
+/// The associated `Destination` describes the destination type used by the router. Typically,
 /// this is a value that knows how to build a SwiftUI `View` (via `SwiftyRouter`),
 /// allowing the router to remain decoupled from concrete view implementations.
 protocol Routable: AnyObject, ObservableObject {
 
-    associatedtype Factory: SwiftyRouter
+    associatedtype Destination: SwiftyRouter
 
     /// The destination that should be presented as a modal sheet.
     ///
     /// Set this to a non-`nil` value to present a sheet; set it back to `nil` to dismiss.
-    var modalDestination: Factory? { get set }
+    var modalDestination: Destination? { get set }
 
     /// The destination that should be presented as a full‑screen cover.
     ///
     /// Set this to a non-`nil` value to present a full‑screen cover; set it back to `nil` to dismiss.
-    var fullScreenCoverDestination: Factory? { get set }
+    var fullScreenCoverDestination: Destination? { get set }
 
     /// Pushes a single destination onto the navigation stack.
     ///
     /// - Parameter destination: The destination to push.
-    func push(_ destination: Factory)
+    func push(_ destination: Destination)
 
     /// Pushes multiple destinations onto the navigation stack in order.
     ///
     /// The first element in `destinations` will be pushed first, followed by subsequent elements.
     ///
     /// - Parameter destinations: The ordered list of destinations to push.
-    func push(_ destinations: [Factory])
+    func push(_ destinations: [Destination])
 
     /// Pops the top destination from the navigation stack.
     ///
@@ -59,7 +59,7 @@ protocol Routable: AnyObject, ObservableObject {
     /// may choose to do nothing.
     ///
     /// - Parameter destination: The destination to pop to.
-    func pop(to destination: Factory)
+    func pop(to destination: Destination)
 
     /// Pops all destinations and returns to the root of the navigation stack.
     func popToRoot()
@@ -73,7 +73,7 @@ protocol Routable: AnyObject, ObservableObject {
     /// - Parameter detents: The set of allowed sizes for the sheet, expressed as `PresentationDetent`
     ///   values (for example, `.medium`, `.large`, or custom). Implementations may store and apply
     ///   these detents when presenting the sheet. If empty, the system’s default detents are used.
-    func show(_ destination: Factory, detents: Set<PresentationDetent>)
+    func show(_ destination: Destination, detents: Set<PresentationDetent>)
 
     /// Presents a destination as a full‑screen cover.
     ///
@@ -81,5 +81,5 @@ protocol Routable: AnyObject, ObservableObject {
     /// to trigger the presentation.
     ///
     /// - Parameter destination: The destination to present as a full‑screen cover.
-    func fullScreenCover(_ destination: Factory)
+    func fullScreenCover(_ destination: Destination)
 }

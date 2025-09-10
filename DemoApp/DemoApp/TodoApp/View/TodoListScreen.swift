@@ -10,8 +10,8 @@ import SwiftyRouter
 
 struct TodoListScreen: View {
 
-    @State private var router = Router<TodoRouter>()
     @State private var store = TodoStore()
+    private let router = Router<TodoRouter>()
 
     var body: some View {
         SwiftyRootView(router: router) {

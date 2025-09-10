@@ -7,11 +7,11 @@
 
 import SwiftUI
 
-public class Router<Factory: SwiftyRouter>: Routable {
+public class Router<Destination: SwiftyRouter>: Routable {
 
-    @Published internal var path: [Factory] = []
-    @Published internal var modalDestination: Factory? = nil
-    @Published internal var fullScreenCoverDestination: Factory? = nil
+    @Published internal var path: [Destination] = []
+    @Published internal var modalDestination: Destination? = nil
+    @Published internal var fullScreenCoverDestination: Destination? = nil
     @Published internal var detents: Set<PresentationDetent> = []
 
     /// Creates a new, empty router.
@@ -78,7 +78,7 @@ public extension Router {
     /// If the destination is not found, the router pops to root.
     ///
     /// - Parameter destination: The destination to pop back to.
-    func pop(to destination: Factory) {
+    func pop(to destination: Destination) {
         if let index = path.firstIndex(of: destination) {
             path = Array(path.prefix(upTo: index + 1))
         } else {
@@ -89,14 +89,14 @@ public extension Router {
     /// Pushes a new destination onto the navigation path.
     ///
     /// - Parameter destination: The destination to append to the path.
-    func push(_ destination: Factory) {
+    func push(_ destination: Destination) {
         path.append(destination)
     }
 
     /// Pushes multiple destinations onto the navigation path in order.
     ///
     /// - Parameter destinations: An array of destinations to append to the path.
-    func push(_ destinations: [Factory]) {
+    func push(_ destinations: [Destination]) {
         destinations.forEach { destination in
             push(destination)
         }
@@ -107,7 +107,7 @@ public extension Router {
     /// - Parameters:
     ///   - destination: The destination to present as a sheet.
     ///   - detents: A set of detents controlling the sheet's height, if supported by the platform.
-    func show(_ destination: Factory, detents: Set<PresentationDetent> = []) {
+    func show(_ destination: Destination, detents: Set<PresentationDetent> = []) {
         self.detents = detents
         modalDestination = destination
     }
@@ -115,7 +115,7 @@ public extension Router {
     /// Presents a destination as a full-screen cover.
     ///
     /// - Parameter destination: The destination to present as a full-screen cover.
-    func fullScreenCover(_ destination: Factory) {
+    func fullScreenCover(_ destination: Destination) {
         fullScreenCoverDestination = destination
     }
 }

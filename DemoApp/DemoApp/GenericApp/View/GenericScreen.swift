@@ -10,7 +10,7 @@ import SwiftyRouter
 
 struct GenericScreen: View {
 
-    @State private var genericRouter = Router<GenericRouter>()
+    private let genericRouter = Router<GenericRouter>()
 
     var body: some View {
         VStack(spacing: 16) {
